@@ -1,23 +1,29 @@
 # ExpenseFlow — Expense & Receipt Management System
 
-A production-oriented mobile and backend expense management system that allows employees to create, manage, and submit business expenses with receipt uploads and OCR processing. Managers and administrators can review, approve, or reject submitted expenses and view expense analytics.
-
 ## Project Overview
 
-ExpenseFlow was developed as part of a Technical Engineering Assignment for a Software Engineer — Mobile / Backend role.
+ExpenseFlow is a mobile and backend expense management system developed as part of a Technical Engineering Assignment for a Software Engineer — Mobile / Backend role.
 
-The system consists of:
+The system allows employees to create and manage business expenses, upload receipts, select expense categories, and submit expenses for approval. Managers and administrators can review submitted expenses, approve or reject them, and view expense statistics.
 
-- A React Native mobile application
-- A Django REST Framework backend
-- SQLite database for local development
-- JWT-based authentication
+The project was developed within the recommended **2–3 working day timebox**. Features that could not reasonably be completed within the timebox are documented under **Known Limitations** and **Future Improvements**, together with how they would be implemented in a production environment.
+
+### Main Components
+
+- React Native mobile application
+- Django REST Framework backend
+- JWT authentication
 - Role-based authorization
 - Expense management
-- Receipt upload
-- Asynchronous OCR processing using Celery and Redis
+- Expense categories
+- Receipt image upload
+- Asynchronous OCR processing
+- Celery + Redis
 - Employee and Manager dashboards
+- Expense approval/rejection workflow
 - Swagger/OpenAPI API documentation
+- Expense filtering, searching and ordering
+
 
 ---
 
@@ -29,7 +35,7 @@ The system consists of:
 - JWT access and refresh tokens
 - Protected API endpoints
 - Role-based access control
-- Employee, Manager, and Admin roles
+- Employee, Manager and Admin roles
 
 ## Employee Features
 
@@ -39,14 +45,16 @@ Employees can:
 - View their expenses
 - Create expenses
 - Select expense categories
-- Enter amount, currency, description, and date
+- Enter amount and currency
+- Add descriptions
+- Select an expense date using a date picker
 - Upload receipt images
 - Submit expenses for approval
 - View expense status
-- View employee expense dashboard
+- View employee expense statistics
 - Search and filter expenses
 
-Supported expense statuses:
+### Expense Statuses
 
 - `DRAFT`
 - `SUBMITTED`
@@ -57,12 +65,12 @@ Supported expense statuses:
 
 Managers can:
 
-- View expense statistics
+- View manager dashboard statistics
 - View pending expense approvals
 - Approve submitted expenses
 - Reject submitted expenses
 - Provide a rejection reason
-- View total approved expense amounts
+- View approved expense totals
 - View employee and expense statistics
 
 Managers cannot approve or reject their own expenses.
@@ -76,28 +84,44 @@ Uploaded receipts are processed asynchronously using:
 - Celery
 - Redis
 - Tesseract OCR
+- Pytesseract
+- Pillow
 
-OCR processing extracts text from the uploaded receipt and stores the extracted text with the expense.
+OCR extracts text from uploaded receipts and stores the extracted text against the corresponding expense.
 
-Supported receipt formats:
+### Receipt Validation
 
-- JPG
-- JPEG
-- PNG
-
-Maximum receipt size:
-
-- 5 MB
+- Supported formats: JPG, JPEG and PNG
+- Maximum file size: 5 MB
 
 ## Expense Categories
 
 Expenses can be assigned to predefined categories.
 
-The mobile application retrieves available categories from the backend and allows the employee to select a category while creating an expense.
+The mobile application retrieves available categories from the backend and allows employees to select a category while creating an expense.
 
-## Expense Dashboard
+## Search, Filtering and Ordering
 
-### Employee Dashboard
+The backend supports:
+
+### Filtering
+
+- Status
+- Category
+- Currency
+
+### Search
+
+- Expense title
+- Description
+
+### Ordering
+
+- Amount
+- Expense date
+- Creation date
+
+## Employee Dashboard
 
 The employee dashboard provides:
 
@@ -107,7 +131,7 @@ The employee dashboard provides:
 - Pending expenses
 - Rejected expenses
 
-### Manager Dashboard
+## Manager Dashboard
 
 The manager dashboard provides:
 
@@ -118,92 +142,228 @@ The manager dashboard provides:
 - Rejected expenses
 - Total approved expense amount
 
----
-
-# Technology Stack
-
-## Mobile Application
-
-- React Native
-- Expo
-- JavaScript
-- React Navigation
-- Expo Image Picker
-- React Native DateTimePicker
-
-## Backend
-
-- Python
-- Django
-- Django REST Framework
-- Django Filters
-- Simple JWT
-
-## Database
-
-- SQLite
-- Django ORM
-
-SQLite is used for the current local development implementation to keep the project lightweight and easy to run without additional database configuration.
-
-## Asynchronous Processing
-
-- Celery
-- Redis
-- Tesseract OCR
-- Pytesseract
-- Pillow
-
-## API Documentation
-
-- OpenAPI
-- Swagger UI
-
-## Development Tools
-
-- Git
-- GitHub
-- Insomnia
-- macOS
 
 ---
 
-# Project Structure
+# Architecture
+
+ExpenseFlow follows a client-server architecture.
 
 ```text
-Technical Assignment/
-│
-├── Backend/
-│   ├── config/
-│   │   ├── settings.py
-│   │   ├── urls.py
-│   │   ├── celery.py
-│   │   └── ...
-│   │
-│   ├── expenses/
-│   │   ├── models.py
-│   │   ├── serializers.py
-│   │   ├── views.py
-│   │   ├── urls.py
-│   │   ├── tasks.py
-│   │   ├── permissions.py
-│   │   └── ...
-│   │
-│   ├── manage.py
-│   ├── requirements.txt
-│   └── ...
-│
-├── Mobile-App/
-│   ├── screens/
-│   │   ├── SplashScreen.js
-│   │   ├── LoginScreen.js
-│   │   ├── ExpenseListScreen.js
-│   │   ├── AddExpenseScreen.js
-│   │   └── ...
-│   │
-│   ├── App.js
-│   ├── package.json
-│   └── ...
-│
-├── README.md
-└── .gitignore
+                    ┌──────────────────────────┐
+                    │    React Native + Expo   │
+                    │     Mobile Application   │
+                    └────────────┬─────────────┘
+                                 │
+                                 │ REST API / JWT
+                                 ▼
+                    ┌──────────────────────────┐
+                    │   Django REST Framework  │
+                    │                          │
+                    │ Authentication           │
+                    │ Expense APIs             │
+                    │ Category APIs             │
+                    │ Dashboard APIs            │
+                    │ Approval APIs             │
+                    │ Receipt Upload            │
+                    └────────────┬─────────────┘
+                                 │
+                                 ▼
+                    ┌──────────────────────────┐
+                    │         SQLite           │
+                    │    Development Database  │
+                    └──────────────────────────┘
+
+              Receipt Upload / OCR Processing
+                                 │
+                                 ▼
+                    ┌──────────────────────────┐
+                    │      Celery Worker       │
+                    └────────────┬─────────────┘
+                                 │
+                                 ▼
+                    ┌──────────────────────────┐
+                    │          Redis           │
+                    │       Task Broker        │
+                    └────────────┬─────────────┘
+                                 │
+                                 ▼
+                    ┌──────────────────────────┐
+                    │      Tesseract OCR       │
+                    │    Receipt Text Extractor │
+                    └──────────────────────────┘
+
+Request Flow
+The employee interacts with the React Native application.
+The application sends authenticated REST API requests to Django.
+Django REST Framework validates the request and JWT token.
+Expense data is stored in the development database.
+When a receipt is uploaded, a Celery task is created.
+Redis acts as the Celery message broker.
+The Celery worker processes the receipt using Tesseract OCR.
+Extracted OCR text is stored against the expense.
+
+Technology Stack
+Mobile Application
+React Native
+Expo
+JavaScript
+React Navigation
+Expo Image Picker
+React Native DateTimePicker
+Backend
+Python
+Django
+Django REST Framework
+Django Filters
+Simple JWT
+Database
+SQLite for local development
+
+PostgreSQL was planned as the production database according to the assignment requirements, but it was not configured within the available 2–3 day implementation timebox.
+
+Asynchronous Processing
+Celery
+Redis
+Tesseract OCR
+Pytesseract
+Pillow
+API Documentation
+OpenAPI
+Swagger UI
+Development Tools
+Git
+GitHub
+Insomnia
+macOS
+
+Database Design
+
+The application uses SQLite during local development.
+
+The main database entities are:
+
+User
+
+The authentication user associated with each expense.
+
+Important relationship:
+
+User
+  │
+  └──< Expense
+
+A user can have multiple expenses.
+
+Category
+
+Stores expense categories.
+
+Fields:
+
+id
+name
+
+Each category can be associated with multiple expenses.
+
+Category
+   │
+   └──< Expense
+Expense
+
+The main business entity.
+
+Important fields include:
+
+id
+user
+category
+title
+amount
+currency
+description
+receipt
+ocr_text
+merchant
+ocr_date
+ocr_total
+expense_date
+status
+rejection_reason
+created_at
+updated_at
+Relationships
+User
+ │
+ └──────────────< Expense >────────────── Category
+                       │
+                       │
+                       └── Receipt
+                              │
+                              ▼
+                         OCR Processing
+
+Production Database
+
+For production deployment, PostgreSQL would replace SQLite.
+
+The migration would involve:
+
+Configure PostgreSQL credentials through environment variables.
+Install the PostgreSQL database driver.
+Update Django database configuration.
+Run Django migrations.
+Configure database backups.
+Add connection pooling.
+Secure database credentials using a secrets manager.
+API Documentation
+
+Interactive API documentation is available through Swagger/OpenAPI.
+
+After starting the Django server, open:
+
+http://127.0.0.1:8000/api/docs/
+
+The exact Swagger URL depends on the URL configuration in the project.
+
+The API provides endpoints for:
+
+Authentication
+POST /api/v1/auth/login/
+
+Used to authenticate a user and obtain JWT access and refresh tokens.
+
+Expenses
+GET    /api/v1/expenses/
+POST   /api/v1/expenses/
+GET    /api/v1/expenses/<id>/
+PUT    /api/v1/expenses/<id>/
+PATCH  /api/v1/expenses/<id>/
+DELETE /api/v1/expenses/<id>/
+Categories
+GET /api/v1/expenses/categories/
+Submit Expense
+POST /api/v1/expenses/<id>/submit/
+Approve Expense
+POST /api/v1/expenses/<id>/approve/
+Reject Expense
+POST /api/v1/expenses/<id>/reject/
+
+Example request:
+
+{
+    "rejection_reason": "Receipt is missing or unclear."
+}
+Employee Dashboard
+GET /api/v1/expenses/dashboard/employee/
+Manager Dashboard
+GET /api/v1/expenses/dashboard/manager/
+Authentication
+
+Protected endpoints require:
+
+Authorization: Bearer <access_token>
+
+The API was tested during development using Insomnia and the Swagger interface.
+
+
