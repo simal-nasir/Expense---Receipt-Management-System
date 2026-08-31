@@ -1,0 +1,102 @@
+# ==========================================
+# Python / Django
+# ==========================================
+
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environments
+venv/
+env/
+.venv/
+ENV/
+
+# Django
+*.log
+db.sqlite3
+db.sqlite3-journal
+
+# Environment variables / secrets
+.env
+.env.*
+!.env.example
+
+# Django media/uploads
+Backend/media/
+
+# Python coverage
+.coverage
+htmlcov/
+.pytest_cache/
+
+# ==========================================
+# Celery
+# ==========================================
+
+celerybeat.pid
+celerybeat-schedule
+
+# ==========================================
+# Node / React Native / Expo
+# ==========================================
+
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Expo
+.expo/
+.expo-shared/
+dist/
+web-build/
+
+# React Native
+.metro-health-check*
+*.tgz
+
+# ==========================================
+# macOS
+# ==========================================
+
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# ==========================================
+# IDE / Editors
+# ==========================================
+
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ==========================================
+# Xcode
+# ==========================================
+
+ios/build/
+ios/Pods/
+*.xcuserstate
+xcuserdata/
+DerivedData/
+
+# ==========================================
+# Android
+# ==========================================
+
+android/.gradle/
+android/app/build/
+android/build/
+android/local.properties
+
+# ==========================================
+# Temporary files
+# ==========================================
+
+*.tmp
+*.temp
+*.bak
