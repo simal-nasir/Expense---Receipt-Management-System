@@ -178,6 +178,7 @@ ExpenseFlow follows a client-server architecture.
                     │      Tesseract OCR       │
                     │    Receipt Text Extractor │
                     └──────────────────────────┘
+```
 
 Request Flow
 The employee interacts with the React Native application.
@@ -281,6 +282,7 @@ rejection_reason
 created_at
 updated_at
 Relationships
+```text
 User
  │
  └──────────────< Expense >────────────── Category
@@ -290,6 +292,7 @@ User
                               │
                               ▼
                          OCR Processing
+```
 
 
 # API Documentation
