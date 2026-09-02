@@ -1,0 +1,11 @@
+[tool.ruff]
+line-length = 100
+exclude = [
+    "*/migrations/*",
+]
+
+[tool.ruff.lint]
+ignore = [
+    "RUF012",
+    "I001",
+]
