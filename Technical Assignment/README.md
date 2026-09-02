@@ -294,7 +294,6 @@ User
                          OCR Processing
 ```
 
-
 # API Documentation
 
 Interactive API documentation is available through Swagger/OpenAPI.
@@ -324,7 +323,6 @@ git clone <your-github-repository-url>
 cd "Technical Assignment"
 
 2. Backend Setup
-
 Navigate to the backend directory:
 
 cd Backend
