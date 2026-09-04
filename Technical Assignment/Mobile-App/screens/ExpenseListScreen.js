@@ -29,7 +29,7 @@ export default function ExpenseListScreen({ navigation, route }) {
       setLoading(true);
 
       const response = await fetch(
-        'http://127.0.0.1:8000/api/v1/expenses/',
+        'https://expense-management-system-4fxb.onrender.com/api/v1/expenses/',
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,

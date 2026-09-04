@@ -8,7 +8,7 @@ import {
   Alert,
 } from 'react-native';
 
-const API_URL = 'http://127.0.0.1:8000';
+const API_URL = 'https://expense-management-system-4fxb.onrender.com';
 
 export default function ProfileScreen({ navigation, route }) {
   const accessToken = route.params?.accessToken;

@@ -9,7 +9,7 @@ import {
   ScrollView,
 } from 'react-native';
 
-const API_URL = 'http://127.0.0.1:8000';
+const API_URL = 'https://expense-management-system-4fxb.onrender.com';
 
 export default function ExpenseDetailScreen({ navigation, route }) {
   const expense = route.params?.expense;
