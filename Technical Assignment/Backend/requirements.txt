@@ -21,3 +21,8 @@ pytest-django==4.14.0
 factory-boy==3.3.3
 ruff==0.12.10
 python-dotenv
+gunicorn
+whitenoise
+celery
+redis
+pytesseract

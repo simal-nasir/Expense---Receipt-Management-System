@@ -20,6 +20,13 @@ ENV/
 *.log
 db.sqlite3
 db.sqlite3-journal
+staticfiles/
+
+# Redis
+dump.rdb
+
+# macOS
+.DS_Store
 
 # Environment variables / secrets
 .env
